@@ -7,8 +7,13 @@ provider "aws" {
 }
 
 resource "aws_key_pair" "public_key" {
-  key_name   = "${var.USER_ID}_public_key"
+  key_name   = "${var.USER_ID}_public_key-req"
   public_key = file(var.PATH_TO_PUBLIC_KEY)
+}
+
+locals {
+  peering_id = module.vpc_peering_requester.id # for vpc-peering requester
+  #peering_id = "pcx-0f47f2201e82c4be7"        # for vpc-peering accepter # 두번째
 }
 
 module "vpc" {
@@ -21,7 +26,7 @@ module "vpc" {
     ENABLE_BACKEND_SUBNET       = var.ENABLE_BACKEND_SUBNET
     USER_ID                     = var.USER_ID
 
-    VPC-Peer할 때만 활성화 할 것
+    #VPC-Peer할 때만 활성화 할 것
     PEER_CIDR                   = var.PEER_VPC_CIDR
     PEER_ID                     = local.peering_id
 }
@@ -61,7 +66,7 @@ module "alb_auto_scaling" {
     
     # for auto-scaling-group
     AUTO_SCALE_MIN_SIZE         = 1
-    AUTO_SCALE_MAX_SIZE         = 3
+    AUTO_SCALE_MAX_SIZE         = 4
     DESIRED_CAPACITY            = 2
 
     # for tagging
@@ -87,18 +92,18 @@ module "route53" {
     CONTINENT                   = var.CONTINENT #geo routing policy to routing53
 }
 */
-/* Cloudfront 비활성
-module "web_images_cdn" { #cloudfront
-    
-    source                      = "./modules/cloudfront" 
 
-    IMAGES_BUCKET_NAME          = "${var.USER_ID}-web-images-${var.AWS_REGION}-sk2"
+module "web_images_cdn" {
+    
+    source                      = "./modules/S3" 
+
+    IMAGES_BUCKET_NAME          = "skcc-${var.USER_ID}-web-images-${var.AWS_REGION}"
     BUCKET_OBJECT               = "images/iu.gif"
-    LOG_BUCKET_NAME             = "${var.USER_ID}-cf-log-${var.AWS_REGION}-sk2"
+    LOG_BUCKET_NAME             = "skcc-${var.USER_ID}-cf-log-${var.AWS_REGION}"
     USER_ID                 = var.USER_ID
 
 }
-*/
+
 # [주의!] 
 # 0. 동일 코드를 두개의 폴더로 분리 peer1, peer2
 # 1. peer2는 vpc_peering모듈X, vpc일부 코드 실행차단, variables.tf 수정
@@ -108,12 +113,13 @@ module "web_images_cdn" { #cloudfront
 # 5. peer2 리전에서 수동으로 accept 수행
 # 6. peer2 vpc추가 코드 활성화후 다시 적용 
 
-module "vpc_peering_requester" { //accepter는 실행하지 말것!!!
+module "vpc_peering_requester" {
+#accepter는 실행하지 말것!!!
     
     source                      = "./modules/vpc-peering-requester" 
     
-    AWS_ACCESS_KEY              = var.AWS_ACCESS_KEY
-    AWS_SECRET_KEY              = var.AWS_SECRET_KEY
+    #AWS_ACCESS_KEY              = var.AWS_ACCESS_KEY
+    #AWS_SECRET_KEY              = var.AWS_SECRET_KEY
     VPC_ID                      = module.vpc.id
     
     PEER_AWS_REGION             = var.PEER_AWS_REGION

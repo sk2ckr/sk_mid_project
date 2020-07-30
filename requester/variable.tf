@@ -1,7 +1,7 @@
 ## /
 
 variable "USER_ID" {
-  default = "skuser04"
+  default = "skuser04r"
 }
 
 #variable "AWS_ACCESS_KEY" {}
@@ -9,11 +9,11 @@ variable "USER_ID" {
 #variable "AWS_SECRET_KEY" {}
 
 variable "AWS_REGION" {
-  default = "us-east-1"
+  default = "us-west-1"
 }
 
 variable "PEER_AWS_REGION" {
-  default = "us-east-1"
+  default = "us-west-1"
 }
 
 variable "PATH_TO_PUBLIC_KEY" {
@@ -33,7 +33,7 @@ variable "FRONTEND_SUBNET_COUNT" {
 }
 
 variable "BACKEND_SUBNET_COUNT" {
-  default = 2
+  default = 0
 }
 
 variable "ENABLE_BACKEND_SUBNET" {
@@ -42,7 +42,7 @@ variable "ENABLE_BACKEND_SUBNET" {
 
 
 variable "SSH_ACCESS_HOST" {
-  default = "3.83.189.53/32"
+  default = "3.80.168.135/32"
 }
 
 variable "WEB_SERVICE_PORTS" {

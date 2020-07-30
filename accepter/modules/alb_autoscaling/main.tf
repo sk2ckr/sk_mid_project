@@ -29,7 +29,7 @@ resource "aws_alb" "alb" {
 resource "aws_s3_bucket" "alb_log" {
     count  = local.port_count
 
-    bucket = "${var.ALB_LOG_BUCKET_NAME}-${var.WEB_SERVICE_PORTS[count.index]}-sk2"
+    bucket = "${var.ALB_LOG_BUCKET_NAME}-${var.WEB_SERVICE_PORTS[count.index]}"
     policy = <<EOF
 {
 "Version": "2012-10-17",
@@ -40,7 +40,7 @@ resource "aws_s3_bucket" "alb_log" {
 "AWS": "arn:aws:iam::${var.ALB_ACCOUNT_ID}:root"
 },
 "Action": "s3:PutObject",
-"Resource": "arn:aws:s3:::${var.ALB_LOG_BUCKET_NAME}-${var.WEB_SERVICE_PORTS[count.index]}-sk2/*"
+"Resource": "arn:aws:s3:::${var.ALB_LOG_BUCKET_NAME}-${var.WEB_SERVICE_PORTS[count.index]}/*"
 }
 ]
 }
@@ -67,7 +67,7 @@ resource "aws_alb_target_group" "target_group" {
     count       = local.port_count
 
     name = "${var.USER_ID}-alb-target-group-${var.WEB_SERVICE_PORTS[count.index]}"
-    port = 8080
+    port = 80
     protocol = "HTTP"
     vpc_id = var.VPC_ID
     
@@ -123,7 +123,7 @@ resource "aws_launch_configuration" "launchconfig" {
     sudo yum update
     sudo yum install -y curl
     sudo yum install -y httpd
-    sed -i.bak 's/80/8080/g' /etc/httpd/conf/httpd.conf
+    #sed -i.bak 's/80/8080/g' /etc/httpd/conf/httpd.conf
     sudo echo "Hostname : <b>$(hostname)</b><br>" >> /var/www/html/index.html
     sudo echo "Region : ${var.AWS_REGION}<br>" >> /var/www/html/index.html
     sudo echo "Create Time : $(date +%Y'-'%m'-'%d' '%H':'%M':'%S)<br>" >> /var/www/html/index.html

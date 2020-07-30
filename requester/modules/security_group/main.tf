@@ -34,8 +34,8 @@ resource "aws_security_group_rule" "alb_ingress" {
 resource "aws_security_group_rule" "alb_egress" {
   count             = local.port_count
   type              = "egress"
-  from_port         = 8080
-  to_port           = 8080
+  from_port         = 80
+  to_port           = 80
   protocol          = "TCP"
   security_group_id = aws_security_group.alb[count.index].id
   source_security_group_id = aws_security_group.web_server[count.index].id
@@ -61,8 +61,8 @@ resource "aws_security_group" "web_server" {
 resource "aws_security_group_rule" "web_server_ingress" {
   count             = local.port_count
   type              = "ingress"
-  from_port         = 8080
-  to_port           = 8080
+  from_port         = 80
+  to_port           = 80
   protocol          = "TCP"
   security_group_id = aws_security_group.web_server[count.index].id
   source_security_group_id = aws_security_group.alb[count.index].id
@@ -106,7 +106,14 @@ resource "aws_security_group" "ssh_maintenance" {
       cidr_blocks = [var.SSH_ACCESS_HOST] ## ACCESS_HOST 만 접근
   }
   
-    tags = {
+  ingress { 
+      from_port   = 0
+      to_port     = 0
+      protocol    = "icmp"
+      cidr_blocks = [var.PEER_VPC_CIDR]
+  }
+  
+  tags = {
     Name = "${var.USER_ID}_ssh_security_group"
   }
 }

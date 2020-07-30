@@ -11,6 +11,11 @@ resource "aws_key_pair" "public_key" {
   public_key = file(var.PATH_TO_PUBLIC_KEY)
 }
 
+locals {
+  #peering_id = module.vpc_peering_requester.id # for vpc-peering requester
+  peering_id = "pcx-0c26b121458534238"        # for vpc-peering accepter # 두번째
+}
+
 module "vpc" {
     
     source                      = "./modules/vpc" 
@@ -21,7 +26,7 @@ module "vpc" {
     ENABLE_BACKEND_SUBNET       = var.ENABLE_BACKEND_SUBNET
     USER_ID                     = var.USER_ID
 
-    VPC-Peer할 때만 활성화 할 것
+    #VPC-Peer할 때만 활성화 할 것
     PEER_CIDR                   = var.PEER_VPC_CIDR
     PEER_ID                     = local.peering_id
 }
@@ -61,7 +66,7 @@ module "alb_auto_scaling" {
     
     # for auto-scaling-group
     AUTO_SCALE_MIN_SIZE         = 1
-    AUTO_SCALE_MAX_SIZE         = 3
+    AUTO_SCALE_MAX_SIZE         = 4
     DESIRED_CAPACITY            = 2
 
     # for tagging
@@ -87,6 +92,17 @@ module "route53" {
     CONTINENT                   = var.CONTINENT #geo routing policy to routing53
 }
 */
+
+module "web_images_cdn" {
+    
+    source                      = "./modules/S3" 
+
+    IMAGES_BUCKET_NAME          = "skcc-${var.USER_ID}-web-images-${var.AWS_REGION}"
+    BUCKET_OBJECT               = "images/iu.gif"
+    LOG_BUCKET_NAME             = "skcc-${var.USER_ID}-cf-log-${var.AWS_REGION}"
+    USER_ID                 = var.USER_ID
+
+}
 /* Cloudfront 비활성
 module "web_images_cdn" { #cloudfront
     

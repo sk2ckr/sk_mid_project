@@ -17,7 +17,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = "true"
   enable_classiclink   = "false"
   tags = {
-    Name = "${var.USER_ID}-vpc"
+    Name = "${var.USER_ID}-accepter-vpc"
   }
 }
 
@@ -55,10 +55,10 @@ resource "aws_route_table" "frontend" {
   }
 
   #VPC-peering 시 추가
-  #route {
-  #   cidr_block = var.PEER_CIDR
-  #   gateway_id = var.PEER_ID
-  #}
+  route {
+     cidr_block = var.PEER_CIDR
+     gateway_id = var.PEER_ID
+  }
 
   tags = {
     Name = "${var.USER_ID}-frontend-route"

@@ -11,13 +11,13 @@ output "alb_domain_names" {
 
 # web_images_cdn module block
 #------------------------------------------------------------------------------
-output "image_object_uri" {
-	value = module.web_images_cdn.s3_object_uri
-}
+#output "image_object_uri" {
+#	value = module.web_images_cdn.s3_object_uri
+#}
 
-output "cloudfront_domain_name" {
-	value = module.web_images_cdn.cloudfront_domain_name
-}
+#output "cloudfront_domain_name" {
+#	value = module.web_images_cdn.cloudfront_domain_name
+#}
 #------------------------------------------------------------------------------
 
 #output "route53_web_url" {
