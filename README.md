@@ -8,8 +8,11 @@ $ terraform init
 $ terraform plan
 $ terraform apply --auto-approve
 
-실행하면 진행 중 아래 에러 발생
+실행하면 진행 중 아래 에러 발생(정상임)
 ============================================================================================================================================================
+module.vpc.data.aws_availability_zones.available: Refreshing state...
+aws_key_pair.public_key: Creating...
+... 중략 ...
 module.alb_auto_scaling.aws_autoscaling_policy.scaling_policy[0]: Creation complete after 1s [id=skuser04a-tracking-policy-80]
 
 Error: Error creating route: InvalidParameterValue: route table rtb-0749ab966c4c93c0c and network gateway pcx-04e232c116185fa60 belong to different networks
@@ -28,6 +31,9 @@ $ terraform apply --auto-approve
 
 실행하여 아래 내용 확인
 ============================================================================================================================================================
+module.vpc_peering_requester.data.aws_vpc.peer: Refreshing state...
+module.vpc_peering_requester.data.aws_caller_identity.peer: Refreshing state...
+...중략...
 Apply complete! Resources: 26 added, 0 changed, 0 destroyed.
 
 Outputs:

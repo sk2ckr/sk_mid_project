@@ -1,8 +1,6 @@
 ## /
 
 provider "aws" {
-#  access_key = var.AWS_ACCESS_KEY
-#  secret_key = var.AWS_SECRET_KEY
   region     = var.AWS_REGION
 }
 
@@ -13,7 +11,7 @@ resource "aws_key_pair" "public_key" {
 
 locals {
   #peering_id = module.vpc_peering_requester.id # for vpc-peering requester
-  peering_id = "pcx-0c26b121458534238"        # for vpc-peering accepter # 두번째
+  peering_id = "pcx-0795ad43947a20ea5"        # for vpc-peering accepter # 두번째
 }
 
 module "vpc" {
@@ -38,6 +36,7 @@ module "security_group_policy" {
     VPC_ID                      = module.vpc.id
     WEB_SERVICE_PORTS           = var.WEB_SERVICE_PORTS #80,8080
     SSH_ACCESS_HOST             = var.SSH_ACCESS_HOST
+    PEER_CIDR                   = var.PEER_VPC_CIDR
     USER_ID                     = var.USER_ID
 }
 
@@ -73,25 +72,6 @@ module "alb_auto_scaling" {
     USER_ID                 = var.USER_ID
 
 }
-/* 라우드53 비활성
-module "route53" { 
-    
-    source                      = "./modules/route53" 
-
-    HOSTED_ZONE_ID              = var.HOSTED_ZONE_ID
-    
-    ALBS                        = module.alb_auto_scaling.alb
-    WEB_SERVICE_PORTS           = var.WEB_SERVICE_PORTS
-    # ALB_DNS_NAME                = module.alb_auto_scaling.alb_domain_name
-    # ALB_ZONE_ID                 = module.alb_auto_scaling.alb_zone_id
-    
-    AWS_REGION                  = var.AWS_REGION
-    USER_ID                 = var.USER_ID
-
-    DOMAIN_NAME                 = var.DOMAIN_NAME
-    CONTINENT                   = var.CONTINENT #geo routing policy to routing53
-}
-*/
 
 module "web_images_cdn" {
     
@@ -103,18 +83,6 @@ module "web_images_cdn" {
     USER_ID                 = var.USER_ID
 
 }
-/* Cloudfront 비활성
-module "web_images_cdn" { #cloudfront
-    
-    source                      = "./modules/cloudfront" 
-
-    IMAGES_BUCKET_NAME          = "${var.USER_ID}-web-images-${var.AWS_REGION}-sk2"
-    BUCKET_OBJECT               = "images/iu.gif"
-    LOG_BUCKET_NAME             = "${var.USER_ID}-cf-log-${var.AWS_REGION}-sk2"
-    USER_ID                 = var.USER_ID
-
-}
-*/
 # [주의!] 
 # 0. 동일 코드를 두개의 폴더로 분리 peer1, peer2
 # 1. peer2는 vpc_peering모듈X, vpc일부 코드 실행차단, variables.tf 수정
