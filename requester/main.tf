@@ -1,13 +1,11 @@
 ## /
 
 provider "aws" {
-#  access_key = var.AWS_ACCESS_KEY
-#  secret_key = var.AWS_SECRET_KEY
   region     = var.AWS_REGION
 }
 
 resource "aws_key_pair" "public_key" {
-  key_name   = "${var.USER_ID}_public_key-req"
+  key_name   = "${var.USER_ID}_public_key"
   public_key = file(var.PATH_TO_PUBLIC_KEY)
 }
 
@@ -74,25 +72,6 @@ module "alb_auto_scaling" {
     USER_ID                 = var.USER_ID
 
 }
-/* 라우드53 비활성
-module "route53" { 
-    
-    source                      = "./modules/route53" 
-
-    HOSTED_ZONE_ID              = var.HOSTED_ZONE_ID
-    
-    ALBS                        = module.alb_auto_scaling.alb
-    WEB_SERVICE_PORTS           = var.WEB_SERVICE_PORTS
-    # ALB_DNS_NAME                = module.alb_auto_scaling.alb_domain_name
-    # ALB_ZONE_ID                 = module.alb_auto_scaling.alb_zone_id
-    
-    AWS_REGION                  = var.AWS_REGION
-    USER_ID                 = var.USER_ID
-
-    DOMAIN_NAME                 = var.DOMAIN_NAME
-    CONTINENT                   = var.CONTINENT #geo routing policy to routing53
-}
-*/
 
 module "web_images_cdn" {
     

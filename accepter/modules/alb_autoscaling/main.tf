@@ -123,7 +123,6 @@ resource "aws_launch_configuration" "launchconfig" {
     sudo yum update
     sudo yum install -y curl
     sudo yum install -y httpd
-    #sed -i.bak 's/80/8080/g' /etc/httpd/conf/httpd.conf
     sudo echo "Hostname : <b>$(hostname)</b><br>" >> /var/www/html/index.html
     sudo echo "Region : ${var.AWS_REGION}<br>" >> /var/www/html/index.html
     sudo echo "Create Time : $(date +%Y'-'%m'-'%d' '%H':'%M':'%S)<br>" >> /var/www/html/index.html
@@ -131,24 +130,6 @@ resource "aws_launch_configuration" "launchconfig" {
     sudo systemctl enable httpd
     sudo systemctl start httpd
 	EOF
-  /*
-	user_data = <<-EOF
-    #!/bin/bash
-    timedatectl set-timezone Asia/Seoul
-    sudo yum update
-    sudo yum install -y curl
-    sudo yum install -y httpd
-    sed -i.bak 's/80/8080/g' /etc/httpd/conf/httpd.conf
-    curl -sO https://raw.githubusercontent.com/jamesby99/terraform-user-data/master/index.html
-    sed -i.bak "s/HOSTNAME/$(hostname)/g" ./index.html
-    sed -i.bak "s/BIRTHTIME/$(date +%Y'-'%m'-'%d' '%H':'%M':'%S)/g" ./index.html
-    sed -i.bak "s/REGION/${var.AWS_REGION}/g" ./index.html
-    sed -i.bak "s/IU_IMAGE_URI/${var.CDN_IMAGE_URI}/g" ./index.html
-    sudo cp ./index.html /var/www/html/            
-    sudo systemctl enable httpd
-    sudo systemctl restart httpd
-	EOF
-  */
 }
 
 resource "aws_autoscaling_group" "scaling_group" {

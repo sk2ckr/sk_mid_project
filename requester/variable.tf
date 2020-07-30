@@ -42,7 +42,7 @@ variable "ENABLE_BACKEND_SUBNET" {
 
 
 variable "SSH_ACCESS_HOST" {
-  default = "3.80.168.135/32"
+  default = "54.158.38.87/32"
 }
 
 variable "WEB_SERVICE_PORTS" {
