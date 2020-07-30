@@ -51,7 +51,8 @@ variable "WEB_SERVICE_PORTS" {
 
 variable "AMIS" {
   default = {
-    us-east-1       = "ami-0e5f76fa1b9ea351b" #북부버지니아
+    us-east-1       = "ami-042977726189313b1" #수동 생성 AMI
+    #us-east-1       = "ami-0e5f76fa1b9ea351b" #북부버지니아
     us-west-1       = "ami-01311df3780ebd33e" #캘리포니아
     us-west-2       = "ami-0e34e7b9ca0ace12d" #오레곤
     eu-west-1       = "ami-0dad359ff462124ca" #아일랜드
