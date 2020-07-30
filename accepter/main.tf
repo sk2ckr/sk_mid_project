@@ -21,9 +21,9 @@ module "vpc" {
     ENABLE_BACKEND_SUBNET       = var.ENABLE_BACKEND_SUBNET
     USER_ID                     = var.USER_ID
 
-    #VPC-Peer할 때만 활성화 할 것
-#    PEER_CIDR                   = var.PEER_VPC_CIDR
-#    PEER_ID                     = local.peering_id
+    VPC-Peer할 때만 활성화 할 것
+    PEER_CIDR                   = var.PEER_VPC_CIDR
+    PEER_ID                     = local.peering_id
 }
 
 module "security_group_policy" {
@@ -87,6 +87,7 @@ module "route53" {
     CONTINENT                   = var.CONTINENT #geo routing policy to routing53
 }
 */
+/* Cloudfront 비활성
 module "web_images_cdn" { #cloudfront
     
     source                      = "./modules/cloudfront" 
@@ -97,7 +98,7 @@ module "web_images_cdn" { #cloudfront
     USER_ID                 = var.USER_ID
 
 }
-
+*/
 # [주의!] 
 # 0. 동일 코드를 두개의 폴더로 분리 peer1, peer2
 # 1. peer2는 vpc_peering모듈X, vpc일부 코드 실행차단, variables.tf 수정
