@@ -38,6 +38,7 @@ module "security_group_policy" {
     VPC_ID                      = module.vpc.id
     WEB_SERVICE_PORTS           = var.WEB_SERVICE_PORTS #80,8080
     SSH_ACCESS_HOST             = var.SSH_ACCESS_HOST
+    PEER_CIDR                   = var.PEER_VPC_CIDR
     USER_ID                     = var.USER_ID
 }
 
