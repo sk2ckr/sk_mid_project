@@ -7,9 +7,6 @@ variable "ALB_AUTO_SCALING_SUBNETS" {
 variable "ALB_SECURITY_GROUPS" {
 }
 
-variable "ALB_LOG_BUCKET_NAME" {
-}
-
 variable "ALB_ACCOUNT_ID" {
 }
 

@@ -1,12 +1,12 @@
 ## /
 
+variable "USER_UID" {
+  default = "skuser04"
+}
+
 variable "USER_ID" {
   default = "skuser04r"
 }
-
-#variable "AWS_ACCESS_KEY" {}
-
-#variable "AWS_SECRET_KEY" {}
 
 variable "AWS_REGION" {
   default = "us-west-1"
@@ -40,7 +40,6 @@ variable "ENABLE_BACKEND_SUBNET" {
   default = false
 }
 
-
 variable "SSH_ACCESS_HOST" {
   default = "54.158.38.87/32"
 }
@@ -51,11 +50,9 @@ variable "WEB_SERVICE_PORTS" {
 
 variable "AMIS" {
   default = {
-    us-east-1       = "ami-042977726189313b1" #수동 생성 AMI
-    #us-east-1       = "ami-0e5f76fa1b9ea351b" #북부버지니아
+    us-east-1       = "ami-0e5f76fa1b9ea351b" #북부버지니아
     us-west-1       = "ami-01311df3780ebd33e" #캘리포니아
     us-west-2       = "ami-0e34e7b9ca0ace12d" #오레곤
-    eu-west-1       = "ami-0dad359ff462124ca" #아일랜드
     eu-west-3       = "ami-08c757228751c5335" #파리
     ap-northeast-2  = "ami-00edfb46b107f643c" #서울
   }
@@ -69,28 +66,4 @@ variable "ALB_ACCOUNT_ID" {
     eu-west-3       = "009996457667" #파리
     ap-northeast-2  = "600734575887" #서울
   }
-}
-
-variable "HOSTED_ZONE_ID" {
-  default = "Z0592988313227VEFX5E8"
-}
-
-variable "DOMAIN_NAME" {
-  default = "kiunsen.site"
-}
-
-#ALB생성 Region에 따른 A-record가 geo routing할 대상 대륙 지정 
-variable "CONTINENT" {
-  default = ["AF", "AN", "EU", "OC"]
-
-# eu-west-03
-# AF: Africa
-# AN: Antarctica
-# EU: Europe
-# OC: Oceania
-
-# us-west-01
-# AS: Asia
-# NA: North America
-# SA: South America  
 }

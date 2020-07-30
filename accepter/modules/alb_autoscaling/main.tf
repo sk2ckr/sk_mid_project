@@ -9,12 +9,6 @@ resource "aws_alb" "alb" {
   internal = false
   subnets = var.ALB_AUTO_SCALING_SUBNETS
   security_groups = [var.ALB_SECURITY_GROUPS[count.index].id]
-  
-  access_logs {
-    bucket = aws_s3_bucket.alb_log[count.index].id
-    prefix = "frontend-alb"
-    enabled = true
-  }
 
   lifecycle { 
     create_before_destroy = true 
@@ -24,43 +18,6 @@ resource "aws_alb" "alb" {
     Name = "${var.USER_ID}-alb-${var.WEB_SERVICE_PORTS[count.index]}"
   }
   
-}
-
-resource "aws_s3_bucket" "alb_log" {
-    count  = local.port_count
-
-    bucket = "${var.ALB_LOG_BUCKET_NAME}-${var.WEB_SERVICE_PORTS[count.index]}"
-    policy = <<EOF
-{
-"Version": "2012-10-17",
-"Statement": [
-{
-"Effect": "Allow",
-"Principal": {
-"AWS": "arn:aws:iam::${var.ALB_ACCOUNT_ID}:root"
-},
-"Action": "s3:PutObject",
-"Resource": "arn:aws:s3:::${var.ALB_LOG_BUCKET_NAME}-${var.WEB_SERVICE_PORTS[count.index]}/*"
-}
-]
-}
-EOF
-    
-    lifecycle_rule {
-        id = "log_lifecycle"
-        prefix = ""
-        enabled = true
-        transition {
-            days = 30
-            storage_class = "GLACIER"
-        }
-
-        expiration {
-            days = 90
-        }
-    }
-
-    force_destroy = "true"
 }
 
 resource "aws_alb_target_group" "target_group" {

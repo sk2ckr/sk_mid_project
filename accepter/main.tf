@@ -11,13 +11,14 @@ resource "aws_key_pair" "public_key" {
 
 locals {
   #peering_id = module.vpc_peering_requester.id # for vpc-peering requester
-  peering_id = "pcx-0795ad43947a20ea5"        # for vpc-peering accepter # 두번째
+  peering_id = "pcx-093814cde79ff57a6"        # for vpc-peering accepter # 두번째
 }
 
 module "vpc" {
     
     source                      = "./modules/vpc" 
     
+    AWS_REGION                  = var.AWS_REGION
     VPC_CIDR                    = var.VPC_CIDR
     FRONTEND_SUBNET_COUNT       = var.FRONTEND_SUBNET_COUNT
     BACKEND_SUBNET_COUNT        = var.BACKEND_SUBNET_COUNT
@@ -51,7 +52,6 @@ module "alb_auto_scaling" {
     VPC_ID                      = module.vpc.id
     ALB_AUTO_SCALING_SUBNETS    = [for s in module.vpc.frontend_subnets : s.id]
     ALB_SECURITY_GROUPS         = module.security_group_policy.alb_sgs
-    ALB_LOG_BUCKET_NAME         = "${var.USER_ID}-alb-log-${var.AWS_REGION}"
     ALB_ACCOUNT_ID              = lookup(var.ALB_ACCOUNT_ID, var.AWS_REGION)
 
     # instance templete config
@@ -60,7 +60,8 @@ module "alb_auto_scaling" {
     WEB_SECURITY_GROUPS         = module.security_group_policy.web_server_sgs
     SSH_SECURITY_GROUP          = module.security_group_policy.ssh_sgi
     PUBLIC_KEY_NAME             = aws_key_pair.public_key.key_name
-    CDN_IMAGE_URI               = module.web_images_cdn.s3_object_uri #인라인으로 배포
+    #CDN_IMAGE_URI               = module.web_images_cdn.s3_object_uri #인라인으로 배포
+    CDN_IMAGE_URI               = "https://skcc-${var.USER_UID}-web-images.s3-${var.PEER_AWS_REGION}.amazonaws.com/images/perfect.jpg"
     AWS_REGION                  = var.AWS_REGION  #인라인으로 배포
     
     # for auto-scaling-group
@@ -77,10 +78,9 @@ module "web_images_cdn" {
     
     source                      = "./modules/S3" 
 
-    IMAGES_BUCKET_NAME          = "skcc-${var.USER_ID}-web-images-${var.AWS_REGION}"
-    BUCKET_OBJECT               = "images/iu.gif"
-    LOG_BUCKET_NAME             = "skcc-${var.USER_ID}-cf-log-${var.AWS_REGION}"
-    USER_ID                 = var.USER_ID
+    IMAGES_BUCKET_NAME          = "skcc-${var.USER_UID}-web-images"
+    BUCKET_OBJECT               = "images/perfect.jpg"
+    USER_ID                     = var.USER_ID
 
 }
 # [주의!] 

@@ -136,3 +136,17 @@ resource "aws_route_table_association" "backend-association" {
   subnet_id      = aws_subnet.backend[count.index].id
   route_table_id = aws_route_table.backend_route[0].id
 }
+
+resource "aws_vpc_endpoint" "s3-endpoint" {
+  vpc_id       = aws_vpc.vpc.id
+  service_name = "com.amazonaws.${var.AWS_REGION}.s3"
+
+  tags = {
+    Environment = "Internal Access"
+  }
+}
+
+resource "aws_vpc_endpoint_route_table_association" "s3-endpoint" {
+  route_table_id  = aws_route_table.frontend.id
+  vpc_endpoint_id = aws_vpc_endpoint.s3-endpoint.id
+}
