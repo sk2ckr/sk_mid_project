@@ -4,6 +4,7 @@ provider "aws" {
 }
 
 data "aws_vpc" "peer" {
+  id = var.VPC_ID
   provider   = aws.peer
   cidr_block = var.PEER_VPC_CIDR
 }

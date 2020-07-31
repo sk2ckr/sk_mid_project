@@ -81,3 +81,5 @@ variable "ALB_ACCOUNT_ID" {
 		ap-northeast-2  = "600734575887" #서울
 	}
 }
+
+variable "PEER_ID" { }
