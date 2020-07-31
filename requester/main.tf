@@ -87,9 +87,7 @@ module "vpc_peering_requester" {
 #accepter는 실행하지 말것!!!
     
     source                      = "./modules/vpc-peering-requester" 
-    
-    #AWS_ACCESS_KEY              = var.AWS_ACCESS_KEY
-    #AWS_SECRET_KEY              = var.AWS_SECRET_KEY
+
     VPC_ID                      = module.vpc.id
     
     PEER_AWS_REGION             = var.PEER_AWS_REGION

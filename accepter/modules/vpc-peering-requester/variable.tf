@@ -13,5 +13,5 @@ variable "PEER_AWS_REGION" {
 variable "PEER_VPC_CIDR" {
 }
 
-variable "WHO_ARE_YOU" {
+variable "USER_ID" {
 }

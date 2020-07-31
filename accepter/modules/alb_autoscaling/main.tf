@@ -40,15 +40,6 @@ resource "aws_alb_target_group" "target_group" {
     }
 }
 
-# autoscaling이 아닌 instance 대상일 경우
-# resource "aws_alb_target_group_attachment" "attach-targets" {
-#     # count = var.WEB_SERVER_COUNT
-#     target_group_arn = aws_alb_target_group.targets.arn
-#     # target_id = aws_instance.web-server[0].id
-#     target_id = aws_autoscaling_group.webserver-autoscaling.id
-#     port = 80
-# }
-
 resource "aws_alb_listener" "listener" {
     count       = local.port_count
 

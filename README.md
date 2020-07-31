@@ -1,9 +1,24 @@
 # sk_mid_project
 
-[생성 순서]
+[사전 환경 설정]
+- IAM 보안자격 증명 탭에서 Access Key 생성
+$ export AWS_ACCESS_KEY_ID= [키 ID 입력]
+$ export AWS_SECRET_ACCESS_KEY= [키 값 입력]
+
+- terraform.io 에 접속하여 Linux 64-bit 다운로드 링크 복사 및 PATH 설정
+$ wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
+$ export PATH=$PATH:~/environment/
+
+- 인스턴스 접속을 위한 공개키 생성
+$ cd ~/.ssh
+$ ssh-keygen
+- 엔터 3번하여 key 생성
+
+[적용 절차]
 
 1. accepter
 
+$ cd ~/environment/sk_mid_project/accepter
 $ terraform init
 $ terraform plan
 $ terraform apply --auto-approve
@@ -25,6 +40,7 @@ Error: Error creating route: InvalidParameterValue: route table rtb-0749ab966c4c
 
 2. requester
 
+$ cd ~/environment/sk_mid_project/requester
 $ terraform init
 $ terraform plan
 $ terraform apply --auto-approve
@@ -55,9 +71,11 @@ locals {
 ============================================================================================================================================================
 
 3. accepter
-초기에 생성된 accepter 인스턴스는 httpd 설치가 안되는 듯하므로 확인 후 종료
+초기에 생성된 accepter 인스턴스는 httpd 설치가 안되면 생성된 인스턴스 종료 (종료하면 Autoscaling으로 자동 생성됨)
 AWS Management Console로 이동
 EC2 -> 인스턴스 -> accepter 인스턴스 모두 선택 -> 작업 버튼 -> 인스턴스 상태 -> 종료
+
+$ cd ~/environment/sk_mid_project/accepter
 $ terraform plan
 $ terraform apply --auto-approve
 
@@ -67,3 +85,8 @@ VPC -> 피어링 연결 -> 수락대기 상태의 피어링 선택 -> 작업 버
 
 5. 테스트
 - 3번에서 종료한 accepter 인스턴스는 잠시 기다리면 자동 생성
+
+[문제점 및 개선 방향]
+- VPC Peering 수동으로 설정해야 하므로 Peering 자동화
+- accepter 최초 인스턴스는 서비스가 안되는 경우가 있으므로 최초 인스턴스 종료 안하고 바로 서비스 가능하게 하기
+- peering id 자동 설정(과연 가능 할지...)

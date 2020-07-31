@@ -1,7 +1,5 @@
 provider "aws" {
   alias     = "peer"
-  #access_key = var.AWS_ACCESS_KEY
-  #secret_key = var.AWS_SECRET_KEY
   region     = var.PEER_AWS_REGION
 }
 
@@ -15,6 +13,7 @@ data "aws_caller_identity" "peer" {
 }
 
 resource "aws_vpc_peering_connection" "peer" {
+  provider      = aws.peer
   vpc_id        = var.VPC_ID
 
   peer_vpc_id   = data.aws_vpc.peer.id

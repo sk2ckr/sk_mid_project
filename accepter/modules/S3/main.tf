@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "images_cdn" {
   acl    = "private"
 
   force_destroy = "true"
-
+  
   tags = {
     Name = var.IMAGES_BUCKET_NAME
   }
@@ -16,4 +16,5 @@ resource "aws_s3_bucket_object" "images_cdn" {
   key    = var.BUCKET_OBJECT
   source = "./${var.BUCKET_OBJECT}"
   content_type = "image/jpg"
+  acl    = "public-read"
 }
