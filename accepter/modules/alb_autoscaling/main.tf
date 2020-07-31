@@ -36,7 +36,7 @@ resource "aws_alb_target_group" "target_group" {
     }   
 
     tags = { 
-        Name = "${var.USER_ID}-alb-target-group-${var.WEB_SERVICE_PORTS[count.index]}" 
+        Name = "skcc-${var.USER_ID}-alb-target-group-${var.WEB_SERVICE_PORTS[count.index]}" 
     }
 }
 
@@ -67,14 +67,12 @@ resource "aws_launch_configuration" "launchconfig" {
   # user data에서 자동으로 cloudfront 이미지 주소와 사설 IP 할당
   user_data = <<EOF
     #!/bin/bash
-    timedatectl set-timezone Asia/Seoul
-    sudo yum update
-    sudo yum install -y curl
+    sudo timedatectl set-timezone Asia/Seoul
     sudo yum install -y httpd
     sudo echo "Hostname : <b>$(hostname)</b><br>" >> /var/www/html/index.html
     sudo echo "Region : ${var.AWS_REGION}<br>" >> /var/www/html/index.html
     sudo echo "Create Time : $(date +%Y'-'%m'-'%d' '%H':'%M':'%S)<br>" >> /var/www/html/index.html
-    sudo echo "<img src=${var.CDN_IMAGE_URI}>" >> /var/www/html/index.html
+    sudo echo "<img src=${var.IMAGE_URI}>" >> /var/www/html/index.html
     sudo systemctl enable httpd
     sudo systemctl start httpd
 	EOF

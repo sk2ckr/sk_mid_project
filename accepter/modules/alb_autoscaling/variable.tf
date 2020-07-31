@@ -19,7 +19,7 @@ variable "INSTANCE_TYPE" {
 variable "PUBLIC_KEY_NAME" {
 }
 
-variable "CDN_IMAGE_URI" { }
+variable "IMAGE_URI" { }
 
 variable "WEB_SECURITY_GROUPS" {
 }
