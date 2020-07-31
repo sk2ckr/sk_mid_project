@@ -11,7 +11,7 @@ resource "aws_key_pair" "public_key" {
 
 locals {
   #peering_id = module.vpc_peering_requester.id # for vpc-peering requester
-  peering_id = "pcx-077ab970ae2500901"        # for vpc-peering accepter # 두번째
+  peering_id = "pcx-02b8dc0d45d045ca4"        # for vpc-peering accepter
 }
 
 module "vpc" {

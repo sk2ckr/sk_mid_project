@@ -7,6 +7,7 @@ $ export AWS_SECRET_ACCESS_KEY= [키 값 입력]
 
 - terraform.io 에 접속하여 Linux 64-bit 다운로드 링크 복사 및 PATH 설정
 $ wget https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip
+$ unzip terraform_0.12.29_linux_amd64.zip 
 $ export PATH=$PATH:~/environment/
 
 - 인스턴스 접속을 위한 공개키 생성
