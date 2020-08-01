@@ -17,7 +17,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = "true"
   enable_classiclink   = "false"
   tags = {
-    Name = "${var.USER_ID}-requester-vpc"
+    Name = "${var.USER_ID}-accepter-vpc"
   }
 }
 
@@ -116,25 +116,31 @@ resource "aws_nat_gateway" "nat_gw" {
 }
 
 # VPC setup for NAT
-resource "aws_route_table" "backend_route" {
+resource "aws_route_table" "backend" {
   vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat_gw[0].id
   }
+  
+  #VPC-peering 시 추가
+  route {
+     cidr_block = var.PEER_CIDR
+     gateway_id = var.PEER_ID
+  }
 
   tags = {
-    Name = "${var.USER_ID}-backend_route"
+    Name = "${var.USER_ID}-backend-route"
   }
   count = var.ENABLE_BACKEND_SUBNET ? 1 : 0
 }
 
 # route associations backend subnet
 resource "aws_route_table_association" "backend-association" {
-  count          = var.BACKEND_SUBNET_COUNT
-  subnet_id      = aws_subnet.backend[count.index].id
-  route_table_id = aws_route_table.backend_route[0].id
+  count           = length(aws_subnet.backend)
+  subnet_id       = aws_subnet.backend[count.index].id
+  route_table_id  = aws_route_table.backend[0].id
 }
 
 resource "aws_vpc_endpoint" "s3-endpoint" {
@@ -146,7 +152,12 @@ resource "aws_vpc_endpoint" "s3-endpoint" {
   }
 }
 
-resource "aws_vpc_endpoint_route_table_association" "s3-endpoint" {
+resource "aws_vpc_endpoint_route_table_association" "s3-endpoint-frontend" {
   route_table_id  = aws_route_table.frontend.id
+  vpc_endpoint_id = aws_vpc_endpoint.s3-endpoint.id
+}
+
+resource "aws_vpc_endpoint_route_table_association" "s3-endpoint-backend" {
+  route_table_id  = aws_route_table.backend[0].id
   vpc_endpoint_id = aws_vpc_endpoint.s3-endpoint.id
 }

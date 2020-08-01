@@ -1,26 +1,26 @@
-# 전체 서비스 통합 사용자ID
+# 서비스 사용자ID
 variable "USER_UID" {
 	default = "user100"
 }
 
 # Requester VPC의 사용자ID
 variable "REQUESTER_USER_ID" {
-	default = "user135"
+	default = "user101"
 }
 
 # Accepter VPC의 사용자ID
 variable "ACCEPTER_USER_ID" {
-	default = "user246"
+	default = "user102"
 }
 
 # Requester VPC의 리전
 variable "REQUESTER_AWS_REGION" {
-	default = "us-east-1"
+	default = "us-west-1"
 }
 
 # Accepter VPC의 리전
 variable "ACCEPTER_AWS_REGION" {
-	default = "ap-northeast-2"
+	default = "us-east-1"
 }
 
 # 인스턴스 접속용 공개키
@@ -45,12 +45,12 @@ variable "FRONTEND_SUBNET_COUNT" {
 
 # Backend 서브넷(보통 WAS/DB) 개수
 variable "BACKEND_SUBNET_COUNT" {
-	default = 0
+	default = 2
 }
 
 # Backend 서브넷 활성화 여부
 variable "ENABLE_BACKEND_SUBNET" {
-	default = false
+	default = true
 }
 
 # 인스턴스 접속 호스트IP
@@ -60,7 +60,7 @@ variable "SSH_ACCESS_HOST" {
 
 # 서비스 포트["80","8080"] 등
 variable "WEB_SERVICE_PORTS" {
-	default = ["80"]
+	default = ["80", "8080"]
 }
 
 # AMI ID
@@ -71,6 +71,8 @@ variable "AMIS" {
 		us-west-1       = "ami-01311df3780ebd33e" #캘리포니아
 		us-west-2       = "ami-0873b46c45c11058d" #오레곤
 		ap-northeast-2  = "ami-0bd7691bf6470fe9c" #서울
+		ap-southeast-1	= "ami-02f3b237d55fc8691" #싱가포르
+		eu-central-1	= "ami-096c1922a7e55b3b0" #프랑크푸르트
 	}
 }
 
@@ -82,5 +84,7 @@ variable "ALB_ACCOUNT_ID" {
 		us-west-1       = "027434742980" #캘리포니아
 		us-west-2       = "797873946194" #오레곤
 		ap-northeast-2  = "600734575887" #서울
+		ap-southeast-1	= "114774131450" #싱가포르
+		eu-central-1	= "054676820928" #프랑크푸르트
 	}
 }

@@ -24,7 +24,7 @@ $ terraform apply --auto-approve
 
 [테스트]
 - Windows Powershell Script
-for($i=0;$i -lt 3600;$i++){wget user55r-alb-80-1168350943.us-west-1.elb.amazonaws.com;start-sleep -Seconds 1}
+for($i=0;$i -lt 3600;$i++){wget http://user111a-alb-8080-1993274192.us-east-2.elb.amazonaws.com:8080/;start-sleep -Seconds 1}
 
 
 [문제점]
