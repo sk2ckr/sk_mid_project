@@ -4,6 +4,12 @@ provider "aws" {
   region     = var.AWS_REGION
 }
 
+resource "aws_key_pair" "public_key" {
+  key_name   = "${var.USER_ID}_public_key"
+  public_key = file(var.PATH_TO_PUBLIC_KEY)
+}
+
+
 module "vpc" {
     
     source                      = "./modules/vpc" 
@@ -49,8 +55,7 @@ module "alb_auto_scaling" {
     INSTANCE_TYPE               = "t2.micro"
     WEB_SECURITY_GROUPS         = module.security_group_policy.web_server_sgs
     SSH_SECURITY_GROUP          = module.security_group_policy.ssh_sgi
-    PUBLIC_KEY_NAME             = var.KEY_NAME
-    #CDN_IMAGE_URI               = module.web_images_cdn.s3_object_uri #인라인으로 배포
+    PUBLIC_KEY_NAME             = aws_key_pair.public_key.key_name
     IMAGE_URI                   = var.IMAGE_URI
     AWS_REGION                  = var.AWS_REGION  #인라인으로 배포
     

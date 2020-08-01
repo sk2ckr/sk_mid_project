@@ -22,7 +22,9 @@ $ terraform init
 $ terraform plan
 $ terraform apply --auto-approve
 
+[테스트]
+- Windows Powershell Script
+for($i=0;$i -lt 3600;$i++){wget user55r-alb-80-1168350943.us-west-1.elb.amazonaws.com;start-sleep -Seconds 1}
 
-[문제점 및 개선 방향]
-- VPC Peering 수동으로 활성화해야 하므로 Peering 자동 활성화 필요
-- 모든 resourse에 vpc.peer 설정해야 한다고 함
+
+[문제점]

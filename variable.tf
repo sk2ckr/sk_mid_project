@@ -1,28 +1,26 @@
-## /
-
 # 전체 서비스 통합 사용자ID
 variable "USER_UID" {
-	default = "skuser04"
+	default = "user100"
 }
 
 # Requester VPC의 사용자ID
 variable "REQUESTER_USER_ID" {
-	default = "skuser04r"
+	default = "user135"
 }
 
 # Accepter VPC의 사용자ID
 variable "ACCEPTER_USER_ID" {
-	default = "skuser04a"
+	default = "user246"
 }
 
 # Requester VPC의 리전
 variable "REQUESTER_AWS_REGION" {
-	default = "us-west-1"
+	default = "us-east-1"
 }
 
 # Accepter VPC의 리전
 variable "ACCEPTER_AWS_REGION" {
-	default = "us-west-1"
+	default = "ap-northeast-2"
 }
 
 # 인스턴스 접속용 공개키
@@ -65,18 +63,14 @@ variable "WEB_SERVICE_PORTS" {
 	default = ["80"]
 }
 
-variable "IMAGE_URI" {
-	default = "https://skcc-skuser04-web-images.s3-us-west-1.amazonaws.com/images/perfect.jpg"
-}
-
 # AMI ID
 variable "AMIS" {
 	default = {
 		us-east-1       = "ami-0e5f76fa1b9ea351b" #북부버지니아
+		us-east-2		= "ami-07c8bc5c1ce9598c3" #오하이오
 		us-west-1       = "ami-01311df3780ebd33e" #캘리포니아
-		us-west-2       = "ami-0e34e7b9ca0ace12d" #오레곤
-		eu-west-3       = "ami-08c757228751c5335" #파리
-		ap-northeast-2  = "ami-00edfb46b107f643c" #서울
+		us-west-2       = "ami-0873b46c45c11058d" #오레곤
+		ap-northeast-2  = "ami-0bd7691bf6470fe9c" #서울
 	}
 }
 
@@ -84,9 +78,9 @@ variable "AMIS" {
 variable "ALB_ACCOUNT_ID" {
 	default = {
 		us-east-1       = "127311923021" #북부버지니아
+		us-east-2		= "033677994240" #오하이오
 		us-west-1       = "027434742980" #캘리포니아
 		us-west-2       = "797873946194" #오레곤
-		eu-west-3       = "009996457667" #파리
 		ap-northeast-2  = "600734575887" #서울
 	}
 }

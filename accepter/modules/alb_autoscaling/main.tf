@@ -21,35 +21,35 @@ resource "aws_alb" "alb" {
 }
 
 resource "aws_alb_target_group" "target_group" {
-    count       = local.port_count
+  count       = local.port_count
 
-    name = "${var.USER_ID}-alb-target-group-${var.WEB_SERVICE_PORTS[count.index]}"
-    port = 80
-    protocol = "HTTP"
-    vpc_id = var.VPC_ID
-    
-    health_check {
-        interval = 30
-        path = "/"
-        healthy_threshold = 3
-        unhealthy_threshold = 3
-    }   
+  name = "${var.USER_ID}-alb-target-group-${var.WEB_SERVICE_PORTS[count.index]}"
+  port = 80
+  protocol = "HTTP"
+  vpc_id = var.VPC_ID
+  
+  health_check {
+      interval = 30
+      path = "/"
+      healthy_threshold = 3
+      unhealthy_threshold = 3
+  }   
 
-    tags = { 
-        Name = "skcc-${var.USER_ID}-alb-target-group-${var.WEB_SERVICE_PORTS[count.index]}" 
-    }
+  tags = { 
+      Name = "skcc-${var.USER_ID}-alb-target-group-${var.WEB_SERVICE_PORTS[count.index]}" 
+  }
 }
 
 resource "aws_alb_listener" "listener" {
-    count       = local.port_count
+  count       = local.port_count
 
-    load_balancer_arn = aws_alb.alb[count.index].arn
-    port = var.WEB_SERVICE_PORTS[count.index]
-    protocol = "HTTP"
-    default_action {
-        target_group_arn = aws_alb_target_group.target_group[count.index].arn
-        type = "forward"
-    }
+  load_balancer_arn = aws_alb.alb[count.index].arn
+  port = var.WEB_SERVICE_PORTS[count.index]
+  protocol = "HTTP"
+  default_action {
+      target_group_arn = aws_alb_target_group.target_group[count.index].arn
+      type = "forward"
+  }
 }
 
 

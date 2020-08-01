@@ -20,9 +20,6 @@ variable "PEER_AWS_REGION" {
 variable "PATH_TO_PUBLIC_KEY" {
 }
 
-variable "KEY_NAME" {
-}
-
 # 이 VPC의 CIDR
 variable "VPC_CIDR" {
 }

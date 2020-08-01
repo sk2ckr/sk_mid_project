@@ -1,17 +1,5 @@
 provider "aws" {
-  region    = "us-west-1"
-}
-
-provider "aws" {
-  alias     = "peer"
-  region    = "us-west-1"
-}
-
-resource "aws_key_pair" "public_key" {
-  provider      = aws.peer
-
-  key_name   = "${var.USER_UID}_public_key"
-  public_key = file(var.PATH_TO_PUBLIC_KEY)
+  region    = var.REQUESTER_AWS_REGION
 }
 
 module "accepter" {
@@ -33,8 +21,7 @@ module "accepter" {
     AMIS                      = var.AMIS
     ALB_ACCOUNT_ID            = var.ALB_ACCOUNT_ID
     PEER_ID                   = aws_vpc_peering_connection.peer.id
-    IMAGE_URI                 = var.IMAGE_URI
-    KEY_NAME                  = aws_key_pair.public_key.key_name
+    IMAGE_URI                 = "http://${aws_s3_bucket.images_bucket.bucket_regional_domain_name}/${aws_s3_bucket_object.images_object.key}"
 }
 
 module "requester" {
@@ -55,52 +42,80 @@ module "requester" {
     WEB_SERVICE_PORTS         = var.WEB_SERVICE_PORTS
     AMIS                      = var.AMIS
     ALB_ACCOUNT_ID            = var.ALB_ACCOUNT_ID
-    PEER_ID                   = aws_vpc_peering_connection_accepter.peer.id
-    IMAGE_URI                 = var.IMAGE_URI
-    KEY_NAME                  = aws_key_pair.public_key.key_name
-  
+    PEER_ID                   = aws_vpc_peering_connection.peer.id
+    IMAGE_URI                 = "http://${aws_s3_bucket.images_bucket.bucket_regional_domain_name}/${aws_s3_bucket_object.images_object.key}"
 }
 
 ####################################################################
-## S3 생성                                                        ##
+## Common Resourse                                                ##
 ####################################################################
 
-data "aws_caller_identity" "peer" {}
+## VPC Peering (Two Region) ########################################
+provider "aws" {
+  alias  = "peer"
+  region = var.ACCEPTER_AWS_REGION
 
+  # Accepter's credentials.
+}
+
+data "aws_caller_identity" "peer" {
+  provider = aws.peer
+}
+
+# Requester's side of the connection.
 resource "aws_vpc_peering_connection" "peer" {
-  provider      = aws.peer
   vpc_id        = module.requester.vpc_id
-
   peer_vpc_id   = module.accepter.vpc_id
   peer_owner_id = data.aws_caller_identity.peer.account_id
   peer_region   = var.ACCEPTER_AWS_REGION
   auto_accept   = false
 
   tags = {
-    Name = "Requester"
     Side = "Requester"
+    Name = "${var.USER_UID}-VPC-Peering"
   }
 }
 
+# Accepter's side of the connection.
 resource "aws_vpc_peering_connection_accepter" "peer" {
   provider                  = aws.peer
   vpc_peering_connection_id = aws_vpc_peering_connection.peer.id
-  auto_accept               = false
+  auto_accept               = true
 
   tags = {
-    Name = "Accepter"
     Side = "Accepter"
+    Name = "${var.USER_UID}-VPC-Peering"
   }
 }
-
-####################################################################
-## S3 Object 생성                                                 ##
 ####################################################################
 
-# priavate ACL S3 bucket 생성
+## VPC Peering (One Region) ########################################
+/*
+resource "aws_vpc_peering_connection" "peer" {
+  peer_vpc_id   = module.accepter.vpc_id
+  vpc_id        = module.requester.vpc_id
+
+  auto_accept   = true
+  
+  accepter {
+    allow_remote_vpc_dns_resolution = true
+  }
+
+  requester {
+    allow_remote_vpc_dns_resolution = true
+  }
+
+  tags = {
+    Name = "${var.USER_UID}-VPC-Peering"
+    Managed_by  = "terraform"
+  }
+}
+*/
+####################################################################
+
+## S3 bucket, S3 Object
+
 resource "aws_s3_bucket" "images_bucket" {
-  provider      = aws.peer
-
   bucket = "skcc-${var.USER_UID}-web-images"
   acl    = "private"
 
@@ -111,17 +126,10 @@ resource "aws_s3_bucket" "images_bucket" {
   }
 }
 
-# Upload S3 bucket Object
 resource "aws_s3_bucket_object" "images_object" {
-  provider      = aws.peer
-
   bucket = aws_s3_bucket.images_bucket.id
   key    = "images/perfect.jpg"
-  source = "./images/perfect.jpg"
+  source = "./common/images/perfect.jpg"
   content_type = "image/jpg"
   acl    = "public-read"
-}
-
-output "s3_object_uri" {
-  value       = format("http://%s", aws_s3_bucket_object.images_object.key)
 }
