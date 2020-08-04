@@ -1,16 +1,16 @@
 # 서비스 사용자ID
 variable "USER_UID" {
-	default = "user100"
+	default = "user200"
 }
 
 # Requester VPC의 사용자ID
 variable "REQUESTER_USER_ID" {
-	default = "user101"
+	default = "user201"
 }
 
 # Accepter VPC의 사용자ID
 variable "ACCEPTER_USER_ID" {
-	default = "user102"
+	default = "user202"
 }
 
 # Requester VPC의 리전
@@ -61,6 +61,11 @@ variable "SSH_ACCESS_HOST" {
 # 서비스 포트["80","8080"] 등
 variable "WEB_SERVICE_PORTS" {
 	default = ["80", "8080"]
+}
+
+# S3 Object Name
+variable "BUCKET_OBJECT" {
+    default = "images/perfect.jpg"
 }
 
 # AMI ID
