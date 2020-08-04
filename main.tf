@@ -33,8 +33,10 @@ module "accepter" {
   AMIS                      = var.AMIS
   ALB_ACCOUNT_ID            = var.ALB_ACCOUNT_ID
   PEER_ID                   = module.common.vpc_peering_id
-  #IMAGE_URI                 = "http://${aws_s3_bucket.images_bucket.bucket_regional_domain_name}/${aws_s3_bucket_object.images_object.key}"
   IMAGE_URI                 = "https://${module.common.images_cdn}"
+  HOSTED_ZONE_ID            = var.HOSTED_ZONE_ID
+  DOMAIN_NAME               = var.DOMAIN_NAME
+  CONTINENT                 = var.ACCEPTER_CONTINENT
 }
 
 module "requester" {
@@ -56,7 +58,9 @@ module "requester" {
   AMIS                      = var.AMIS
   ALB_ACCOUNT_ID            = var.ALB_ACCOUNT_ID
   PEER_ID                   = module.common.vpc_peering_id
-  #IMAGE_URI                 = "http://${aws_s3_bucket.images_bucket.bucket_regional_domain_name}/${aws_s3_bucket_object.images_object.key}"
   IMAGE_URI                 = "https://${module.common.images_cdn}"
+  HOSTED_ZONE_ID            = var.HOSTED_ZONE_ID
+  DOMAIN_NAME               = var.DOMAIN_NAME
+  CONTINENT                 = var.REQUESTER_CONTINENT
 }
 

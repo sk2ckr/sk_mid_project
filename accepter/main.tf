@@ -67,3 +67,21 @@ module "alb_auto_scaling" {
     USER_ID                 = var.USER_ID
     
 }
+
+module "route53" {
+    
+    source                      = "./modules/route53" 
+
+    USER_UID                    = var.USER_UID
+    HOSTED_ZONE_ID              = var.HOSTED_ZONE_ID
+    
+    ALBS                        = module.alb_auto_scaling.alb
+    WEB_SERVICE_PORTS           = var.WEB_SERVICE_PORTS
+    # ALB_DNS_NAME                = module.alb_auto_scaling.alb_domain_name
+    # ALB_ZONE_ID                 = module.alb_auto_scaling.alb_zone_id
+    
+    AWS_REGION                  = var.AWS_REGION
+
+    DOMAIN_NAME                 = var.DOMAIN_NAME
+    CONTINENT                   = var.CONTINENT #geo routing policy to routing53
+}

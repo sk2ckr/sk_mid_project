@@ -1,16 +1,16 @@
 # 서비스 사용자ID
 variable "USER_UID" {
-	default = "user200"
+	default = "skuser300"
 }
 
 # Requester VPC의 사용자ID
 variable "REQUESTER_USER_ID" {
-	default = "user201"
+	default = "skuser301"
 }
 
 # Accepter VPC의 사용자ID
 variable "ACCEPTER_USER_ID" {
-	default = "user202"
+	default = "skuser302"
 }
 
 # Requester VPC의 리전
@@ -93,3 +93,32 @@ variable "ALB_ACCOUNT_ID" {
 		eu-central-1	= "054676820928" #프랑크푸르트
 	}
 }
+
+# 호스팅 영역 ID
+variable "HOSTED_ZONE_ID" {
+  default = "Z0862536T5BGO77G0AIM"
+}
+
+variable "DOMAIN_NAME" {
+  default = "aws-test.cf"
+}
+
+#ALB생성 Region에 따른 A-record가 geo routing할 대상 대륙 지정 
+variable "REQUESTER_CONTINENT" {
+  default = ["NA", "AF", "AN", "EU"]
+}
+
+variable "ACCEPTER_CONTINENT" {
+  default = ["SA", "AS", "OC"]
+}
+
+# eu-west-03
+# AF: Africa
+# AN: Antarctica
+# EU: Europe
+# OC: Oceania
+
+# us-west-01
+# AS: Asia
+# NA: North America
+# SA: South America  

@@ -61,3 +61,15 @@ variable "AMIS" {
 # ALB ID
 variable "ALB_ACCOUNT_ID" {
 }
+
+# DNS 호스팅 영역
+variable "HOSTED_ZONE_ID" {
+}
+
+# 도메인 이름
+variable "DOMAIN_NAME" {
+}
+
+# 지오라우팅 영역
+variable "CONTINENT" {
+}
