@@ -28,3 +28,4 @@ for($i=0;$i -lt 3600;$i++){wget http://user111a-alb-8080-1993274192.us-east-2.el
 
 
 [문제점]
+# sk_mid_project2
